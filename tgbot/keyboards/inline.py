@@ -1,17 +1,27 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
 import enum
 
 class MarkupName(enum.Enum):
     start = 1
+    profile = 2
 
 def get_inline_user(markup_name, param=None):
     markup = None
 
     if (markup_name == MarkupName.start):
+        markup = ReplyKeyboardMarkup(
+            keyboard=[
+                [
+                KeyboardButton('Поделиться геолокацией', request_location=True)
+                ]
+            ]
+            )
+        return markup
+    if (markup_name == MarkupName.profile):
         markup = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                InlineKeyboardButton('Регистрация', callback_data='registration_login'),
+                InlineKeyboardButton('Преобрести/продлить подписку', callback_data='buy_sub'),
                 ]
             ]
         )
