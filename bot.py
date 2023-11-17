@@ -53,8 +53,6 @@ async def main():
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(bot, storage=storage)
 
-
-
     bot['config'] = config
 
     register_all_middlewares(dp, config)

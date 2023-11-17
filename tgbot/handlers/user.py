@@ -7,6 +7,8 @@ from tgbot.handlers.admin import send_admin_mess
 from tgbot.handlers.growing_products import growing_products
 from tgbot.misc.states import UserStates
 from tgbot.keyboards.inline import get_inline_user, MarkupName
+from tgbot.open_weather import get_weather
+
 
 async def start(message: types.Message):
     await message.bot.send_chat_action(message.chat.id, 'typing')
@@ -27,13 +29,12 @@ async def start(message: types.Message):
 
 async def location(message: types.Message):
     # Получение геолокации от пользователя
-    latitude = message.location.latitude
-    longitude = message.location.longitude
-    print(latitude)
-    print(longitude)
-    # Вывод полученных координат
-    await message.answer(f"Ваши координаты: {latitude}, {longitude}")
+    coord = [message.location.latitude, message.location.longitude]
 
+    # Вывод полученных координат
+    await message.answer(f"Ваши координаты: {coord[0]}, {coord[1]}")
+
+    get_weather(coord)
 
 
 async def functions(message: types.Message):
