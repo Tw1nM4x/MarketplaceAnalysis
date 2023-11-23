@@ -27,14 +27,15 @@ async def start(message: types.Message):
                          parse_mode="html",
                          reply_markup=markup)
 
-async def location(message: types.Message):
+async def location(message: types.Message, state: FSMContext):
     # Получение геолокации от пользователя
     coord = [message.location.latitude, message.location.longitude]
 
     # Вывод полученных координат
     await message.answer(f"Ваши координаты: {coord[0]}, {coord[1]}")
 
-    get_weather(coord)
+    text = get_weather(coord)
+    await message.answer(text)
 
 
 async def functions(message: types.Message):
@@ -96,7 +97,7 @@ def user(dp: Dispatcher):
     dp.register_message_handler(start, commands="start", state='*')
     dp.register_message_handler(functions, commands="functions", state='*')
     dp.register_message_handler(help, commands="help", state='*')
-    dp.register_message_handler(location, content_types='location')
+    dp.register_message_handler(location, content_types='location', state='*')
 
     dp.register_message_handler(help2, state=UserStates.help)
     dp.register_callback_query_handler(start_growing_products, Text(startswith="monthly_turnover"), state=UserStates.start)
