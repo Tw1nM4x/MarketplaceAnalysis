@@ -2,9 +2,9 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.contrib.fsm_storage.redis import RedisStorage2
-from aiogram.utils import executor
+# from aiogram.contrib.fsm_storage.memory import MemoryStorage
+# from aiogram.contrib.fsm_storage.redis import RedisStorage2
+# from aiogram.utils import executor
 
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
@@ -49,9 +49,9 @@ async def main():
 
     sqlite_db.sql_start()
 
-    storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()
+    # storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
-    dp = Dispatcher(bot, storage=storage)
+    dp = Dispatcher(bot)
 
     bot['config'] = config
 
