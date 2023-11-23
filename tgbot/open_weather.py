@@ -20,10 +20,12 @@ def get_weather(coord):
 	}
 
 	try:
+		print(open_weather_token)
 		r = requests.get(
 			f"http://api.openweathermap.org/data/2.5/weather?lat={coord[0]}&lon={coord[1]}&appid={open_weather_token}"
 		)
 		data = r.json()
+		print(data)
 
 		city = data["name"]
 		cur_weather = data["main"]["temp"]
@@ -42,7 +44,7 @@ def get_weather(coord):
 		length_of_the_day = datetime.datetime.fromtimestamp(data["sys"]["sunset"]) - datetime.datetime.fromtimestamp(
 			data["sys"]["sunrise"])
 
-		return (f"***{datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}***\n"
+		print(f"***{datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}***\n"
 		      f"Погода в городе: {city}\nТемпература: {cur_weather}C° {wd}\n"
 		      f"Влажность: {humidity}%\nДавление: {pressure} мм.рт.ст\nВетер: {wind} м/с\n"
 		      f"Восход солнца: {sunrise_timestamp}\nЗакат солнца: {sunset_timestamp}\nПродолжительность дня: {length_of_the_day}\n"

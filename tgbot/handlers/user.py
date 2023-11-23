@@ -5,7 +5,6 @@ from aiogram.dispatcher.filters import Text
 
 from tgbot.handlers.admin import send_admin_mess
 from tgbot.handlers.growing_products import growing_products
-from tgbot.keyboards.reply import get_reply_user, ReplyMarkupName
 from tgbot.misc.states import UserStates
 from tgbot.keyboards.inline import get_inline_user, MarkupName
 from tgbot.open_weather import get_weather
@@ -14,21 +13,28 @@ from tgbot.open_weather import get_weather
 async def start(message: types.Message):
     await message.bot.send_chat_action(message.chat.id, 'typing')
     await UserStates.start.set()
-    markup = get_reply_user(MarkupName.start)
-    await message.answer('''<b>👋🏻 Привет!</b> Я дам вам рекомендации по выбору одежды в зависимости от текущей погоды!\n
-<b>Чтобы я показал вам, что надеть:</b>
-✍🏻 Напишите название вашего населенного пункта или
-🗺 Отправьте свою геолокацию!''', parse_mode="html", reply_markup=markup)
+    markup = get_inline_user(MarkupName.start)
+    await message.answer('''<b>👋🏻 Привет! Я ваш надежный помощник в анализе товаров с маркетплейсов Wildberries и Ozon.</b> 
 
-async def location(message: types.Message, state: FSMContext):
+Что вы можете узнать благодаря мне:
+
+🔹 Месячный оборот товара;
+🔹 Насколько товар популярен по сравнению с другими товарами;
+🔹 Товарные остатки и на каких складах находится товар;
+🔹 По какой цене товар продавался за последние 2 недели, для определения оптимальной цены;
+🔹 Позицию товара по запросу;
+🔹 Поиск товаров, быстро набирающих спрос''',
+                         parse_mode="html",
+                         reply_markup=markup)
+
+async def location(message: types.Message):
     # Получение геолокации от пользователя
     coord = [message.location.latitude, message.location.longitude]
 
     # Вывод полученных координат
     await message.answer(f"Ваши координаты: {coord[0]}, {coord[1]}")
 
-    text = get_weather(coord)
-    await message.answer(text)
+    get_weather(coord)
 
 
 async def functions(message: types.Message):
@@ -90,7 +96,7 @@ def user(dp: Dispatcher):
     dp.register_message_handler(start, commands="start", state='*')
     dp.register_message_handler(functions, commands="functions", state='*')
     dp.register_message_handler(help, commands="help", state='*')
-    dp.register_message_handler(location, content_types='location', state='*')
+    dp.register_message_handler(location, content_types='location')
 
     dp.register_message_handler(help2, state=UserStates.help)
     dp.register_callback_query_handler(start_growing_products, Text(startswith="monthly_turnover"), state=UserStates.start)

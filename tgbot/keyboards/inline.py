@@ -12,9 +12,9 @@ def get_inline_user(markup_name, param=None):
         markup = ReplyKeyboardMarkup(
             keyboard=[
                 [
-                KeyboardButton('Поделиться геолокацией 📍', request_location=True)
+                KeyboardButton('Поделиться геолокацией', request_location=True)
                 ]
-            ], row_width=1
+            ]
             )
         return markup
     if (markup_name == MarkupName.profile):
